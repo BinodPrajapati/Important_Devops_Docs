@@ -1,0 +1,276 @@
+Local AIO IPv4 Address. . . . . . . . . . . : 10.108.117.106
+
+Server IPs
+10.1.109.121
+10.1.109.122
+
+OLD PHP Allication SVN
+svn://10.1.3.132/webadmindocuments/Sandeep/VIMS
+
+New SVN
+svn://10.1.102.123/CBICVIMS/
+
+user ID: 80008458 
+Password: 80008458@082024
+
+CyberARK
+https://10.2.10.130/PasswordVault/myaccounts.aspx
+
+
+#######################################MySQL ###############################################
+Server - 	
+10.1.109.121
+mysql -u vimsdev -p
+Username : 
+Password : Vimsdev#321
+
+U/P for AIO connect
+User:vimsdev
+Password:Cbic#123
+
+
+10.1.104.240
+mysql -u vimsuat -p
+Username : 
+Password : Vims#234uat
+
+
+GRANT ALL PRIVILEGES ON VIMSDB.* TO 'vimsdev'@'%' IDENTIFIED BY 'Cbic#682';
+
+GRANT ALL PRIVILEGES ON vimsdev.* TO 'vimsdev'@'DDVDVIMSDB1' IDENTIFIED BY 'Vimsdev#321';
+GRANT SELECT, INSERT, UPDATE ON vimsdev.* TO 'vimsdev'@'ddvdvimsdb1' IDENTIFIED BY 'your_password';
+
+
+drop database vimsdev;  create database vimsdev; use vimsdev;
+ 
+--- To run sql file files
+source /home/vimsdev/db_script/Complain_Master_Tables.sql
+source /home/vimsdev/db_script/Complain_TransactionTables.sql
+source /home/vimsdev/db_script/DGOV_ZONES_DA_DATA.sql
+source /home/vimsdev/db_script/USER_SCRIPT.sql
+
+
+mysqldump -u vimsdev -p Vimsdev#321 > my_database_backup.sql
+
+
+#################################### SPRINGBOOT ##################################################
+mvn clean install
+mvn spring-boot:run
+java -jar target/your-app-name.jar
+
+
+-- vimsdev user home directory
+/home/vimsdev
+
+-- To install JDK 17
+sudo dnf install java-17-openjdk-devel
+
+--  Check already installed JRE 
+readlink -f $(which java)
+
+-- JDK installed directory
+/usr/lib/jvm/java-17-openjdk-17.0.13.0.11-3.el9.x86_64/bin/java
+
+-- Set JHAVA_HOME and PATH in Linux ENV
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-17.0.13.0.11-3.el9.x86_64
+export PATH=$JAVA_HOME/bin:$PATH
+
+-- Command to check connectivity
+curl https://dlcdn.apache.org/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz
+curl https://dlcdn.apache.org/maven/maven-3/3.9.9/binaries/apache-maven-3.9.9-bin.tar.gz
+
+-- To extarct maven Jar 
+tar -xvzf /home/VIMSUAT/software/apache-maven-3.9.9-bin.tar.gz -C /opt
+
+-- Set Maven HOME and its path in linux ENV
+export M2_HOME=/opt/apache-maven-3.9.9
+export MAVEN_HOME=/opt/apache-maven-3.9.9
+export PATH=$PATH:/opt/apache-maven-3.9.9/bin
+
+-- VIMS app path
+cd /home/vimsdev/CBICVIMS/VIMS_APP/vims
+
+-- Clean build and Run Sprinboot APP
+[root@DDVDVIMSDB1 vims]# mvn clean install
+[root@DDVDVIMSDB1 vims]# mvn clean install -DskipTests=true
+
+CLEAN PACKAGE
+mvn clean package -DskipTests=true
+
+
+DEV server
+For WAR
+java -jar -Dspring.profiles.active=uat /home/vimsdev/CBICVIMS/VIMS_APP/vims/target/vims.war --httpPort=8080
+
+For JAR
+java -jar -Dspring.profiles.active=dev -Dserver.port=8080   /home/vimsdev/CBICVIMS/VIMS_APP/vims/target/vims-1.0.1.jar
+
+Local Jar 
+java -jar target/vims.jar --spring.profiles.active=dev --server.port=8085
+
+
+Local Server
+./mvnw clean package -DskipTests=true
+
+java -jar ./target/vims-1.0.1.war --httpPort=8080
+
+
+
+-- Steps to set the environment variables for the vimsdev user:
+-- Edit the user's .bashrc file (or .bash_profile if it's used):
+
+bash
+Copy code
+vi ~/.bashrc
+Add the following lines at the end of the .bashrc file:
+
+bash
+Copy code
+export M2_HOME=/opt/apache-maven-3.9.9
+export PATH=$M2_HOME/bin:$PATH
+This ensures that Maven's binary directory is included in the PATH for the vimsdev user, and that M2_HOME points to the correct location.
+
+Save and exit the editor (:wq in vi).
+
+Apply the changes by sourcing the .bashrc file:
+
+bash
+source ~/.bashrc
+2. Verify Maven Installation
+After updating the environment variables, verify that Maven is now accessible:
+
+bash
+mvn -version
+
+
+
+#################################### REACT ##################################################
+npm config set proxy http://10.1.8.100:3128 
+npm config set https-proxy http://10.1.8.100:3128 
+
+npm run build
+npm install
+npm start
+
+
+nohup npm run start:dev &> /dev/null &
+
+#################################### Linux Installation Guide ##################################################
+Install as root user 
+sudo su -
+
+122 - node
+yum install nodejs
+
+121 - open jdk 17
+
+Update VM 
+	sudo yum update -y
+
+Java 
+	sudo yum install java-17-openjdk
+	java -version
+Mongo
+	sudo yum install -y mongodb-org
+	
+sebversion
+	sudo yum install subversion   # For RHEL/CentOS 7
+	sudo dnf install subversion   # For RHEL/CentOS 8 and newer
+
+Checkout Code from SVN Repository
+	svn checkout svn://10.1.102.123/CBICVIMS/ /home/vimsdev/CBICVIMS
+	
+Update	
+	svn update /home/vimsdev/CBICVIMS
+
+	
+MAVEN
+	sudo yum install maven -y
+	mvn -version
+	
+
+
+###############################################################################
+Generic mail ID as mentioned below have been created.
+vims.app@icegate.gov.in
+vims.appdev@icegate.gov.in
+
+###############################################################################
+java -jar .\target\vims-1.0.1.jar --spring.profiles.active=dev 
+export SPRING_PROFILES_ACTIVE=dev
+java -jar yourapp.jar --spring.profiles.active=dev
+
+./mvnw clean install -DskipTests  # For Maven
+
+./mvnw clean test
+
+
+select user, host from mysql.user;
+show databases;
+
+
+SMTP server IP  : 10.1.8.59 Port 25
+mail: host: smtp.icegate.gov.in  port: 25
+
+SMS gateway : 10.1.2.156 Port 8080
+sms: url: http://sms.cbec.gov.in:8080/sms/send
+
+
+1. URL to send the sms:
+
+CBIC URL        
+http://sms.cbec.gov.in:8080/sms/send?mob=XXXXXXXXXX&txtmsg=<textmessage>&tmpid=<XXXXXXX>
+
+curl -v http://sms.cbec.gov.in:8080/sms/send?mob=7827926878&tmpid=1107160561273852280&txtmsg=Dear User,Your OTP is {0}. Please donot share this OTP details with anyone. - VIMS
+
+
+curl -v http://sms.cbec.gov.in:8080/sms/send?mob=7827926878&txtmsg=Dear%20Binod%20T2951temp%20The%20ticket%20IM0001%20has%20been%20resolved%20for%20your%20issue.%20Resolution:%20$a.%20Please%20contact%20Saksham%20Seva%20Service%20Desk%20for%20any%20query%20at%20saksham.seva@icegate.gov.in%0D%0APlease%20provide%20your%20valuable%20feedback%20regarding%20resolution%20of%20the%20ticket%20by%20clicking%20on%20link%20https://cbic.gov.in/ticketFeedback/welcome?ID=IM001&tmpid=1107161425053002951
+
+10.1.2.156
+
+http://sms.cbec.gov.in:8080/sms/send?mob=7827926878&txtmsg=Dear%20Binod%20T2951temp%20The%20ticket%20IM0001%20has%20been%20resolved%20for%20your%20issue.%20Resolution:%20$a.%20Please%20contact%20Saksham%20Seva%20Service%20Desk%20for%20any%20query%20at%20saksham.seva@icegate.gov.in%0D%0APlease%20provide%20your%20valuable%20feedback%20regarding%20resolution%20of%20the%20ticket%20by%20clicking%20on%20link%20https://cbic.gov.in/ticketFeedback/welcome?ID=IM001&tmpid=1107161425053002951
+
+
+#########################################
+10.1.109.137
+
+Change ID - C043825
+Task No - T273752, T274437, T281330
+backup T279516
+
+/////////////////
+port open task
+T278260
+
+//////////////////////////////////////////////////////////////
+Aaklan Application port Opening- T280866
+
+/// MySQL task for uat db server
+T278571
+
+JAVA JDK VERSION- TASK- T278933 FOR SERVER TEAM
+
+java -version
+openjdk version "17.0.13" 2024-10-15 LTS
+OpenJDK Runtime Environment (Red_Hat-17.0.13.0.11-1) (build 17.0.13+11-LTS)
+OpenJDK 64-Bit Server VM (Red_Hat-17.0.13.0.11-1) (build 17.0.13+11-LTS, mixed mode, sharing)
+
+
+###############Hiding Tomcat Version Information####################
+https://www.mrc-productivity.com/techblog/?ht_kb=hiding-tomcat-version-information
+
+
+cd /opt/apache-tomcat-10.1.34/lib
+mkdir org
+cd org/
+mkdir apache
+cd apache/
+mkdir catalina
+[cd catalina/
+mkdir util
+cd util/
+nano ServerInfo.properties
+
+server.info=Application Server
+
+sudo systemctl restart tomcat
