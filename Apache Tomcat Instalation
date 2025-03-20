@@ -1,0 +1,98 @@
+#################################################
+APACHE ToMCAT
+
+Unzip
+sudo tar -xvzf /home/vimsdev/software/apache-tomcat-10.1.34.tar.gz
+
+Copy
+cp -r /home/vimsdev/software/apache-tomcat-10.1.34 /opt
+
+cp -r /home/vimsdev/software/vimsapp.war /opt/apache-tomcat-10.1.34/webapps/
+
+
+cd /opt
+sudo wget https://downloads.apache.org/tomcat/tomcat-9/v9.0.98/bin/apache-tomcat-10.1.34-deployer.tar.gz
+
+	
+--Create a Tomcat User (Optional but Recommended)
+sudo useradd -r -m -s /bin/bash tomcat
+
+sudo chown -R tomcat:tomcat /opt/apache-tomcat-10.1.34
+
+-- Set Permissions
+sudo chown -R tomcat:tomcat /opt/apache-tomcat-10.1.34
+sudo chmod -R 755 /opt/apache-tomcat-10.1.34
+
+
+
+--Configure Tomcat Environment Variables
+sudo nano /etc/systemd/system/tomcat.service
+---------------------
+[Unit]
+Description=Apache Tomcat Web Application Container
+After=network.target
+
+[Service]
+Type=forking
+
+Environment=JAVA_HOME=/usr/lib/jvm/java-17-openjdk-17.0.13.0.11-3.el9.x86_64
+Environment=CATALINA_HOME=/opt/apache-tomcat-10.1.34
+Environment=CATALINA_BASE=/opt/apache-tomcat-10.1.34
+Environment=CATALINA_PID=/opt/apache-tomcat-10.1.34/temp/tomcat.pid
+
+ExecStart=/opt/apache-tomcat-10.1.34/bin/startup.sh
+ExecStop=/opt/apache-tomcat-10.1.34/bin/shutdown.sh
+
+User=tomcat
+Group=tomcat
+UMask=0007
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+------------------------
+
+--Enable and Start the Tomcat Service
+sudo systemctl daemon-reload
+sudo systemctl enable tomcat
+sudo systemctl start tomcat
+
+--Verify Tomcat Installation
+http://<your_server_ip>:8080
+sudo systemctl status tomcat
+
+--Accessing Tomcat Manager (Optional)
+sudo nano /opt/apache-tomcat-10.1.34/conf/tomcat-users.xml
+	Add below lines
+		<role rolename="manager-gui"/>
+		<role rolename="manager-script"/>
+		<role rolename="manager-jmx"/>
+		<role rolename="manager-status"/>
+		<user username="tomcat" password="TomcatAdmin" roles="manager-gui,manager-script,manager-jmx,manager-status"/>
+
+
+--Updating Tomcat server port (Optional)
+sudo nano /opt/apache-tomcat-10.1.34/conf/server.xml
+	Add below lines 
+		 <Connector port="8081" protocol="HTTP/1.1"
+           connectionTimeout="20000"
+           redirectPort="8443"
+           address="0.0.0.0"
+           disableIPv6="true"/>
+
+-- Updating context to access Manage screen
+sudo nano /opt/apache-tomcat-10.1.34/webapps/manager/META-INF/context.xml
+	change below block 
+		<Valve className="org.apache.catalina.valves.RemoteAddrValve"
+         allow=".*" />
+
+
+-- restart Tomcat:
+sudo systemctl restart tomcat
+
+-- Stopt tomcat 
+sudo systemctl stop tomcat
+
+
+chmod -R 755 build
